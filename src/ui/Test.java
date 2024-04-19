@@ -29,5 +29,7 @@ public class Test {
         frame.setVisible(true);
 
         System.out.println("jsdfksjhdfj");
+
+        System.out.println("Hello");
     }
 }
