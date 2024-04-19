@@ -149,7 +149,12 @@ INSERT SanPham VALUES ('1', 'ABC', 100, 'M', 0.1, 'LSP0001')
 
 SELECT * FROM SanPham
 
+DELETE FROM SanPham
+
 SELECT * FROM LoaiSP
 
 ALTER TABLE SanPham
 ADD CONSTRAINT Check_KichCo CHECK (kichCo IN ('S', 'M', 'L'))
+
+ALTER TABLE SanPham
+ADD ngayHetHan datetime

@@ -4,17 +4,28 @@
  */
 package ui;
 
+import connect.ConnectDB;
+import dao.SanPham_DAO;
+
+import java.util.ArrayList;
+
 /**
  *
  * @author Admin
  */
 public class SanPham extends javax.swing.JPanel {
 
+    private SanPham_DAO sp_dao;
+
     /**
      * Creates new form SanPham
      */
     public SanPham() {
+        ConnectDB.getInstance().connect();
         initComponents();
+
+        sp_dao = new SanPham_DAO();
+        loadData();
     }
 
     /**
@@ -206,7 +217,7 @@ public class SanPham extends javax.swing.JPanel {
 
         jScrollPaneTTSP.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jTableThongTinSP.setModel(new javax.swing.table.DefaultTableModel(
+        jTableThongTinSP.setModel(modelSanPham = new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -216,9 +227,7 @@ public class SanPham extends javax.swing.JPanel {
                 {null, null, null, null, null},
                 {null, null, null, null, null}
             },
-            new String [] {
-                "Mã SP", "Tên SP", "Loại SP", "Đơn giá", "Trạng thái"
-            }
+            new String [] {"Mã SP", "Tên SP", "Loại SP", "Kích cỡ", "Đơn giá"}
         ) {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
@@ -301,7 +310,14 @@ public class SanPham extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbbLoaiSPActionPerformed
 
+    private void loadData(){
+        ArrayList<entity.SanPham> list = sp_dao.getAllProduct();
 
+        modelSanPham.setRowCount(0);
+        for(entity.SanPham sp : list)
+            modelSanPham.addRow(new Object[] {sp.getMaSP(), sp.getTenSP(), sp.getLoaiSP().getMaLoaiSP()
+                    , sp.getKickCo().getKichCo(), sp.getDonGia()});
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;
@@ -315,6 +331,7 @@ public class SanPham extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPaneTTSP;
+    private javax.swing.table.DefaultTableModel modelSanPham;
     private javax.swing.JTable jTableThongTinSP;
     private javax.swing.JLabel lblDonGia;
     private javax.swing.JLabel lblGhiChu;
