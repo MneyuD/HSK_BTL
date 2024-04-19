@@ -302,6 +302,7 @@ public class SanPham extends javax.swing.JPanel {
     }//GEN-LAST:event_cbbLoaiSPActionPerformed
 
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCapNhat;
     private javax.swing.JButton btnThem;

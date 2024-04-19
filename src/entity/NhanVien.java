@@ -10,8 +10,10 @@ public class NhanVien {
 	private Double luong;
 	private Double tienThuong;
 	private String soTKNH;
+	private TaiKhoan taiKhoan;
+
 	public NhanVien(String maNV, String tenNV, boolean gioiTinh, Enum_KhuVuc khuVuc, Double luong, Double tienThuong,
-			String soTKNH) {
+			String soTKNH, TaiKhoan taiKhoan) {
 		super();
 		this.maNV = maNV;
 		this.tenNV = tenNV;
@@ -20,6 +22,7 @@ public class NhanVien {
 		this.luong = luong;
 		this.tienThuong = tienThuong;
 		this.soTKNH = soTKNH;
+		this.taiKhoan = taiKhoan;
 	}
 	public NhanVien(String maNV) {
 		super();
@@ -109,6 +112,15 @@ public class NhanVien {
 	public void setSoTKNH(String soTKNH) {
 		this.soTKNH = soTKNH;
 	}
+
+	public TaiKhoan getTaiKhoan() {
+		return taiKhoan;
+	}
+
+	public void setTaiKhoan(TaiKhoan taiKhoan) {
+		this.taiKhoan = taiKhoan;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(maNV);

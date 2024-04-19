@@ -30,6 +30,5 @@ public class Test {
 
         System.out.println("jsdfksjhdfj");
 
-        System.out.println("Hello");
     }
 }
