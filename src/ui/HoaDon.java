@@ -4,17 +4,36 @@
  */
 package ui;
 
+import connect.ConnectDB;
+import dao.ChiTietHD_DAO;
+import entity.ChiTietHD;
+import entity.SanPham;
+
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 /**
  *
  * @author Admin
  */
 public class HoaDon extends javax.swing.JPanel {
 
+    private ChiTietHD_DAO chiTietHD_dao;
+    private DefaultTableModel modelHoaDon;
+    private DefaultTableModel modelChiTietHD;
+
     /**
      * Creates new form HoaDon
      */
     public HoaDon() {
+        ConnectDB.getInstance().connect();
         initComponents();
+        chiTietHD_dao = new ChiTietHD_DAO();
+
+        ArrayList<ChiTietHD> cthd = chiTietHD_dao.getAllOrder();
+        loadData(cthd);
     }
 
     /**
@@ -76,7 +95,7 @@ public class HoaDon extends javax.swing.JPanel {
         HoaDonInfo_Table = new javax.swing.JTable();
         ChiTietHoaDon = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        jTableChiTietHD = new javax.swing.JTable();
         ThongTin2 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
@@ -423,7 +442,7 @@ public class HoaDon extends javax.swing.JPanel {
         Loc_Button.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Loc_Button.setText("Lọc");
 
-        HoaDonInfo_Table.setModel(new javax.swing.table.DefaultTableModel(
+        HoaDonInfo_Table.setModel(modelHoaDon = new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -449,7 +468,7 @@ public class HoaDon extends javax.swing.JPanel {
         ChiTietHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         ChiTietHoaDon.setText("Chi tiết hóa đơn");
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        jTableChiTietHD.setModel(modelChiTietHD = new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -468,7 +487,7 @@ public class HoaDon extends javax.swing.JPanel {
                 return types [columnIndex];
             }
         });
-        jScrollPane6.setViewportView(jTable4);
+        jScrollPane6.setViewportView(jTableChiTietHD);
 
         ThongTin2.setBackground(new java.awt.Color(250, 238, 232));
 
@@ -752,6 +771,15 @@ public class HoaDon extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_SoDienThoai1_txtActionPerformed
 
+    private void loadData(ArrayList<ChiTietHD> list){
+        modelHoaDon.setRowCount(0);
+        modelChiTietHD.setRowCount(0);
+        for(ChiTietHD cthd : list) {
+            modelHoaDon.addRow(new Object[] {cthd.getHd().getMaHD(), cthd.getHd().getNhanVien().getTenNV(), cthd.getHd().getKhachHang().getTenKH()
+                    , cthd.getHd().getNgayLapHD(), cthd.getHd().getGioRa(), null, cthd.getHd().getTongTien(), null, null});
+            modelChiTietHD.addRow(new Object[] {cthd.getSp().getTenSP(), cthd.getSp().getDonGia(), cthd.getSoLuong(), cthd.getThanhTien(), null});
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel ChiTietHoaDon;
@@ -822,7 +850,7 @@ public class HoaDon extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable4;
+    private javax.swing.JTable jTableChiTietHD;
     private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextArea jTextArea4;
     private javax.swing.JTextField jTextField1;

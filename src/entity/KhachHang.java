@@ -17,13 +17,15 @@ public class KhachHang {
     private LocalDate ngaySinh;
     private boolean  gioiTinh;
     private String sdt;
-	public KhachHang(String maKH, String tenKH, LocalDate ngaySinh, boolean gioiTinh, String sdt) {
+	private int diemTichLuy;
+	public KhachHang(String maKH, String tenKH, LocalDate ngaySinh, boolean gioiTinh, String sdt, int diemTichLuy) {
 		super();
 		this.maKH = maKH;
 		this.tenKH = tenKH;
 		this.ngaySinh = ngaySinh;
 		this.gioiTinh = gioiTinh;
 		this.sdt = sdt;
+		this.diemTichLuy = 0;
 	}
 	
 	/*
@@ -113,7 +115,9 @@ public class KhachHang {
 		return "KhachHang [maKH=" + maKH + ", tenKH=" + tenKH + ", ngaySinh=" + ngaySinh + ", gioiTinh=" + gioiTinh
 				+ ", sdt=" + sdt + "]";
 	}
-    
-    
-    
+
+
+	public int getDiemTichLuy() {
+		return diemTichLuy;
+	}
 }

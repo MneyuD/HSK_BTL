@@ -6,11 +6,13 @@ public class ChiTietHD {
 	private HoaDon hd;
 	private SanPham sp ;
 	private int soLuong;
-	public ChiTietHD(HoaDon hd, SanPham sp, int soLuong) {
+	private double thanhTien;
+	public ChiTietHD(HoaDon hd, SanPham sp, int soLuong, double thanhTien) {
 		super();
 		this.hd = hd;
 		this.sp = sp;
 		this.soLuong = soLuong;
+		this.thanhTien = 0;
 	}
 	public ChiTietHD(HoaDon hd, SanPham sp) {
 		super();
@@ -72,7 +74,9 @@ public class ChiTietHD {
 	public String toString() {
 		return "ChiTietHD [hd=" + hd + ", sp=" + sp + ", soLuong=" + soLuong + "]";
 	}
-	
-	
 
+
+	public double getThanhTien() {
+		return thanhTien;
+	}
 }

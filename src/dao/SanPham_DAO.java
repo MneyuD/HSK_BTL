@@ -23,20 +23,16 @@ public class SanPham_DAO {
             ResultSet rs = sm.executeQuery();
 
             while(rs.next()) {
-                String maSP = rs.getString("maSP");
-                String tenSP = rs.getString("tenSP");
-                Double donGia = rs.getDouble("donGia");
                 Enum_KichCo kichCo = Enum_KichCo.valueOf(rs.getString("kichCo"));
                 LocalDate ngayHetHan = null;
                 Date dateTime = rs.getDate("ngayHetHan");
                 if(dateTime != null) {
                     ngayHetHan = dateTime.toLocalDate();
                 }
-                Double thue = rs.getDouble("thue");
-                boolean trangThai = rs.getBoolean("trangThai");
                 LoaiSP loaiSp = new LoaiSP(rs.getString("maLoai"), rs.getString("tenLoai"));
 
-                SanPham sp = new SanPham(maSP, tenSP, donGia, thue, kichCo, ngayHetHan, trangThai, loaiSp);
+                SanPham sp = new SanPham(rs.getString("maSP"), rs.getString("tenSP"), rs.getDouble("donGia")
+                        , rs.getDouble("thue"), kichCo, ngayHetHan, rs.getBoolean("trangThai"), loaiSp);
                 dsSP.add(sp);
             }
 
@@ -117,7 +113,7 @@ public class SanPham_DAO {
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
         try {
-            PreparedStatement sm = con.prepareStatement("SSELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE trangThai = ?");
+            PreparedStatement sm = con.prepareStatement("SELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE trangThai = ?");
             sm.setBoolean(1, status);
             ResultSet rs = sm.executeQuery();
 
@@ -170,5 +166,15 @@ public class SanPham_DAO {
             }
         }
         return n > 0;
+    }
+
+    public static void main(String[] args) {
+        ConnectDB.getInstance().connect();
+        SanPham_DAO sp_dao = new SanPham_DAO();
+
+        ArrayList<SanPham> spList = sp_dao.getAllProduct();
+        for(SanPham sp : spList) {
+            System.out.println(": " + sp.getNgayHetHan());
+        }
     }
 }
