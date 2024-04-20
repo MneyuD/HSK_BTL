@@ -79,18 +79,18 @@ public class SanPham_DAO {
         return dsSP;
     }
 
-    public ArrayList<SanPham> getProduct_ByID(String maLoai) {
+    public ArrayList<SanPham> getProduct_ByName(String tenSP) {
         ArrayList<SanPham> dsSP = new ArrayList<SanPham>();
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
         try {
-            PreparedStatement sm = con.prepareStatement("SELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE tenLoai LIKE ?");
-            sm.setString(1, "%" + maLoai + "%");
+            PreparedStatement sm = con.prepareStatement("SELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE tenSP LIKE ?");
+            sm.setString(1, "%" + tenSP + "%");
             ResultSet rs = sm.executeQuery();
 
             while(rs.next()) {
                 String maSP = rs.getString("maSP");
-                String tenSP = rs.getString("tenSP");
+                String tenSanPham = rs.getString("tenSP");
                 Double donGia = rs.getDouble("donGia");
                 Enum_KichCo kichCo = Enum_KichCo.valueOf(rs.getString("kichCo"));
                 LocalDate ngayHetHan = null;
@@ -102,7 +102,7 @@ public class SanPham_DAO {
                 boolean trangThai = rs.getBoolean("trangThai");
                 LoaiSP loaiSp = new LoaiSP(rs.getString("maLoai"), rs.getString("tenLoai"));
 
-                SanPham sp = new SanPham(maSP, tenSP, donGia, thue, kichCo, ngayHetHan, trangThai, loaiSp);
+                SanPham sp = new SanPham(maSP, tenSanPham, donGia, thue, kichCo, ngayHetHan, trangThai, loaiSp);
                 dsSP.add(sp);
             }
 

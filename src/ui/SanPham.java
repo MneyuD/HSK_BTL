@@ -10,6 +10,7 @@ import dao.SanPham_DAO;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -218,6 +219,25 @@ public class SanPham extends javax.swing.JPanel{
 
         btnTim.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnTim.setText("Tìm");
+
+        txtTim.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String tenSP = txtTim.getText().trim();
+                ArrayList<entity.SanPham> spList = sp_dao.getProduct_ByName(tenSP);
+
+                loadData(spList);
+            }
+        });
+        btnTim.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String tenSP = txtTim.getText().trim();
+                ArrayList<entity.SanPham> spList = sp_dao.getProduct_ByName(tenSP);
+
+                loadData(spList);
+            }
+        });
 
         lblLoaiSp.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblLoaiSp.setText("Loại sản phẩm");
