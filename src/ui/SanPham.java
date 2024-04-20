@@ -10,13 +10,15 @@ import dao.SanPham_DAO;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 /**
  *
  * @author Admin
  */
-public class SanPham extends javax.swing.JPanel {
+public class SanPham extends javax.swing.JPanel{
 
     private LoaiSP_DAO loaiSP_dao;
     private SanPham_DAO sp_dao;
@@ -245,6 +247,37 @@ public class SanPham extends javax.swing.JPanel {
                 return types [columnIndex];
             }
         });
+        jTableThongTinSP.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = jTableThongTinSP.getSelectedRow();
+                txtMaSP.setText(modelSanPham.getValueAt(row, 0).toString());
+                txtTenSP.setText(modelSanPham.getValueAt(row, 1).toString());
+                txtDonGia.setText(modelSanPham.getValueAt(row, 4).toString());
+                cbbLoaiSP.setSelectedItem(modelSanPham.getValueAt(row, 2).toString());
+                cbbTrangThai.setSelectedItem(modelSanPham.getValueAt(row, 5).toString());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
         jScrollPaneTTSP.setViewportView(jTableThongTinSP);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -340,10 +373,6 @@ public class SanPham extends javax.swing.JPanel {
 
     }//GEN-LAST:event_cbbLoaiSPActionPerformed
 
-    private void jTableThongTinSPMouseClicked(java.awt.event.MouseEvent evt) {
-
-    }
-
     private void updateComboBoxData() {
         ArrayList<entity.LoaiSP> spList = loaiSP_dao.getAllProductType();
         String[] items = new String[spList.size() + 1];
@@ -360,7 +389,7 @@ public class SanPham extends javax.swing.JPanel {
     private void loadData(ArrayList<entity.SanPham> list){
         modelSanPham.setRowCount(0);
         for(entity.SanPham sp : list)
-            modelSanPham.addRow(new Object[] {sp.getMaSP(), sp.getTenSP(), sp.getLoaiSP().getMaLoaiSP()
+            modelSanPham.addRow(new Object[] {sp.getMaSP(), sp.getTenSP(), sp.getLoaiSP().getTenLoaiSP()
                     , sp.getKickCo().getKichCo(), sp.getDonGia(), sp.isTrangThai() ? "Còn":"Hết"});
     }
 

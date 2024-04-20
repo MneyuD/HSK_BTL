@@ -79,12 +79,45 @@ public class SanPham_DAO {
         return dsSP;
     }
 
+    public ArrayList<SanPham> getProduct_ByID(String maLoai) {
+        ArrayList<SanPham> dsSP = new ArrayList<SanPham>();
+        ConnectDB.getInstance();
+        Connection con = ConnectDB.getConnection();
+        try {
+            PreparedStatement sm = con.prepareStatement("SELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE tenLoai LIKE ?");
+            sm.setString(1, "%" + maLoai + "%");
+            ResultSet rs = sm.executeQuery();
+
+            while(rs.next()) {
+                String maSP = rs.getString("maSP");
+                String tenSP = rs.getString("tenSP");
+                Double donGia = rs.getDouble("donGia");
+                Enum_KichCo kichCo = Enum_KichCo.valueOf(rs.getString("kichCo"));
+                LocalDate ngayHetHan = null;
+                Date dateTime = rs.getDate("ngayHetHan");
+                if(dateTime != null) {
+                    ngayHetHan = dateTime.toLocalDate();
+                }
+                Double thue = rs.getDouble("thue");
+                boolean trangThai = rs.getBoolean("trangThai");
+                LoaiSP loaiSp = new LoaiSP(rs.getString("maLoai"), rs.getString("tenLoai"));
+
+                SanPham sp = new SanPham(maSP, tenSP, donGia, thue, kichCo, ngayHetHan, trangThai, loaiSp);
+                dsSP.add(sp);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dsSP;
+    }
+
     public ArrayList<SanPham> getProduct_ByStatus(boolean status) {
         ArrayList<SanPham> dsSP = new ArrayList<SanPham>();
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
         try {
-            PreparedStatement sm = con.prepareStatement("SELECT * FROM SanPham WHERE trangThai = ?");
+            PreparedStatement sm = con.prepareStatement("SSELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE trangThai = ?");
             sm.setBoolean(1, status);
             ResultSet rs = sm.executeQuery();
 
@@ -100,7 +133,7 @@ public class SanPham_DAO {
                 }
                 Double thue = rs.getDouble("thue");
                 boolean trangThai = rs.getBoolean("trangThai");
-                LoaiSP loaiSp = new LoaiSP(rs.getString("maLoai"));
+                LoaiSP loaiSp = new LoaiSP(rs.getString("maLoai"), rs.getString("tenLoai"));
 
                 SanPham sp = new SanPham(maSP, tenSP, donGia, thue, kichCo, ngayHetHan, trangThai, loaiSp);
                 dsSP.add(sp);
