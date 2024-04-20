@@ -7,6 +7,7 @@ CREATE DATABASE QuanLyCoffee
 --ALTER DATABASE QuanLyCoffee SET ONLINE
 ----Nếu bị lỗi (Recover-Peding) thì set database về online
 --GO
+DROP DATABASE QuanLyCoffee
 
 USE QuanLyCoffee
 
@@ -43,6 +44,8 @@ CREATE TABLE SanPham
 	kichCo NVARCHAR NOT NULL CONSTRAINT Check_KichCo CHECK (kichCo IN ('S', 'M', 'L')),
 	donGia MONEY,
 	thue MONEY NOT NULL,
+	ngayHetHan DATETIME,
+	trangThai BIT NOT NULL,
 	maLoai NVARCHAR(20) REFERENCES LoaiSP(maLoai))
 
 CREATE TABLE Ban
@@ -132,24 +135,16 @@ INSERT KhachHang VALUES
 ('20040003', N'Phan Khánh Chương', '2004-08-18', 1, '123456789', 20),
 ('20040004', N'Dương Nhật Anh', '2004-08-18', 1, '123456789', 0)
 
-PRINT CONVERT(NVARCHAR(30), GETDATE())
-
 INSERT SanPham VALUES 
-('20240419SP000001', N'Cà phê sữa đá', 20000, 'S', 0.1, 'LSP0001', GETDATE()),
-('20240419SP000002', N'Trà sữa truyền thống', 25000, 'M', 0.1, 'LSP0003', GETDATE()),
-('20240419SP000003', N'Sinh tố bơ', 40000, 'M', 0.1, 'LSP0004', GETDATE()),
-('20240419SP000004', N'Trà dâu', 30000, 'M', 0.1, 'LSP0002', GETDATE()),
-('20240419SP000005', N'Trà ổi', 30000, 'M', 0.1, 'LSP0002', GETDATE()),
-('20240419SP000006', N'Bạc xỉu', 20000, 'S', 0.1, 'LSP0001', GETDATE())
+('20240419SP000001', N'Cà phê sữa đá', 20000, 'S', 0.1, GETDATE() , 1, 'LSP0001'),
+('20240419SP000002', N'Trà sữa truyền thống', 25000, 'M', 0.1, GETDATE() , 1, 'LSP0003'),
+('20240419SP000003', N'Sinh tố bơ', 40000, 'M', 0.1, GETDATE() , 1, 'LSP0004'),
+('20240419SP000004', N'Trà dâu', 30000, 'M', 0.1, GETDATE() , 1, 'LSP0002'),
+('20240419SP000005', N'Trà ổi', 30000, 'M', 0.1, GETDATE() , 1, 'LSP0002'),
+('20240419SP000006', N'Bạc xỉu', 20000, 'S', 0.1, GETDATE() , 1, 'LSP0001')
 
 SELECT * FROM SanPham
 
 DELETE FROM SanPham
 
 SELECT * FROM LoaiSP
-
-ALTER TABLE SanPham
-ADD CONSTRAINT Check_KichCo CHECK (kichCo IN ('S', 'M', 'L'))
-
-ALTER TABLE SanPham
-ADD ngayHetHan datetime
