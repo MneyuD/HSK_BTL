@@ -6,20 +6,21 @@ import java.util.Objects;
 public class SanPham {
 	private String maSP;
 	private String tenSP;
-	private LocalDate ngayHetHan;
 	private Double donGia;
 	private Double thue;
 	private Enum_KichCo kickCo ;
+	private LocalDate ngayHetHan;
+	private boolean trangThai;
 	private LoaiSP loaiSP;
-	public SanPham(String maSP, String tenSP, LocalDate ngayHetHan, Double donGia, Double thue, Enum_KichCo kickCo,
-			LoaiSP loaiSP) {
+	public SanPham(String maSP, String tenSP, Double donGia, Double thue, Enum_KichCo kickCo, LocalDate ngayHetHan, boolean trangThai, LoaiSP loaiSP) {
 		super();
 		this.maSP = maSP;
 		this.tenSP = tenSP;
-		this.ngayHetHan = ngayHetHan;
 		this.donGia = donGia;
 		this.thue = thue;
 		this.kickCo = kickCo;
+		this.ngayHetHan = ngayHetHan;
+		this.trangThai = trangThai;
 		this.loaiSP = loaiSP;
 	}
 	public SanPham(String maSP) {
@@ -98,6 +99,13 @@ public class SanPham {
 	public void setKickCo(Enum_KichCo kickCo) {
 		this.kickCo = kickCo;
 	}
+	public boolean isTrangThai() {
+		return trangThai;
+	}
+
+	public void setTrangThai(boolean trangThai) {
+		this.trangThai = trangThai;
+	}
 	/**
 	 * @return the loaiSP
 	 */
@@ -125,13 +133,18 @@ public class SanPham {
 		SanPham other = (SanPham) obj;
 		return Objects.equals(maSP, other.maSP);
 	}
+
 	@Override
 	public String toString() {
-		return "SanPham [maSP=" + maSP + ", tenSP=" + tenSP + ", ngayHetHan=" + ngayHetHan + ", donGia=" + donGia
-				+ ", thue=" + thue + ", kickCo=" + kickCo + ", loaiSP=" + loaiSP + "]";
+		return "SanPham{" +
+				"maSP='" + maSP + '\'' +
+				", tenSP='" + tenSP + '\'' +
+				", donGia=" + donGia +
+				", thue=" + thue +
+				", kickCo=" + kickCo +
+				", ngayHetHan=" + ngayHetHan +
+				", trangThai=" + trangThai +
+				", loaiSP=" + loaiSP +
+				'}';
 	}
-	
-	
-	
-	
 }

@@ -7,7 +7,7 @@ public enum Enum_KichCo {
 	private String kichCo;
 
 	Enum_KichCo(String kichCo) {
-		
+		this.kichCo = kichCo;
 	}
 
 	/**
@@ -28,7 +28,4 @@ public enum Enum_KichCo {
 	public String toString() {
 		return kichCo;
 	}
-	
-	
-
 }

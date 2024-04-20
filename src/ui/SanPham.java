@@ -5,8 +5,11 @@
 package ui;
 
 import connect.ConnectDB;
+import dao.LoaiSP_DAO;
 import dao.SanPham_DAO;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 /**
@@ -15,6 +18,7 @@ import java.util.ArrayList;
  */
 public class SanPham extends javax.swing.JPanel {
 
+    private LoaiSP_DAO loaiSP_dao;
     private SanPham_DAO sp_dao;
 
     /**
@@ -25,7 +29,10 @@ public class SanPham extends javax.swing.JPanel {
         initComponents();
 
         sp_dao = new SanPham_DAO();
-        loadData();
+        loaiSP_dao = new LoaiSP_DAO();
+
+        updateComboBoxData();
+        loadData(sp_dao.getAllProduct());
     }
 
     /**
@@ -101,14 +108,19 @@ public class SanPham extends javax.swing.JPanel {
             }
         });
 
-        cbbLoaiSP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nước", "Đồ ăn", "cái gì đó", "cái gì đó nữa" }));
         cbbLoaiSP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbbLoaiSPActionPerformed(evt);
             }
         });
 
-        cbbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn nha", "Hết nha" }));
+        cbbLoaiSp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbLoaiSpActionPerformed(evt);
+            }
+        });
+
+        cbbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn", "Hết" }));
 
         btnThemLoai.setText("+");
 
@@ -208,29 +220,25 @@ public class SanPham extends javax.swing.JPanel {
         lblLoaiSp.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblLoaiSp.setText("Loại sản phẩm");
 
-        cbbLoaiSp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nước", "Đồ ăn", " " }));
-
         lblTrangthai.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblTrangthai.setText("Trạng thái");
 
-        cbbTrangthai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn nha", "Hết nha" }));
+        cbbTrangthai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn", "Hết" }));
+
+        cbbTrangthai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbTrangthaiActionPerformed(evt);
+            }
+        });
 
         jScrollPaneTTSP.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         jTableThongTinSP.setModel(modelSanPham = new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {"Mã SP", "Tên SP", "Loại SP", "Kích cỡ", "Đơn giá"}
+                new String [] {"Mã SP", "Tên SP", "Loại SP", "Kích cỡ", "Đơn giá", "Trạng Thái"},
+            0
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -302,21 +310,58 @@ public class SanPham extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cbbTrangthaiActionPerformed(ActionEvent evt) {
+        String trangThai = (String) cbbTrangthai.getSelectedItem();
+        boolean status = false;
+        if(trangThai.equalsIgnoreCase("Còn")) {
+            status = true;
+        }
+        ArrayList<entity.SanPham> spList = sp_dao.getProduct_ByStatus(status);
+
+        loadData(spList);
+    }
+
+    private void cbbLoaiSpActionPerformed(ActionEvent evt) {
+        String tenLoai = (String) cbbLoaiSp.getSelectedItem();
+        ArrayList<entity.SanPham> spList;
+        if(cbbLoaiSp.getSelectedIndex() == 0) {
+            spList = sp_dao.getAllProduct();
+        } else {
+            spList = sp_dao.getProductByType(tenLoai);
+        }
+        loadData(spList);
+    }
+
     private void txtTenSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenSPActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTenSPActionPerformed
 
     private void cbbLoaiSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbLoaiSPActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_cbbLoaiSPActionPerformed
 
-    private void loadData(){
-        ArrayList<entity.SanPham> list = sp_dao.getAllProduct();
+    private void jTableThongTinSPMouseClicked(java.awt.event.MouseEvent evt) {
 
+    }
+
+    private void updateComboBoxData() {
+        ArrayList<entity.LoaiSP> spList = loaiSP_dao.getAllProductType();
+        String[] items = new String[spList.size() + 1];
+        int i = 0;
+        items[i] = "Tất cả";
+        for(entity.LoaiSP sp : spList) {
+            i++;
+            items[i] = sp.getTenLoaiSP();
+        }
+        cbbLoaiSp.setModel(new DefaultComboBoxModel<String>(items));
+        cbbLoaiSP.setModel(new DefaultComboBoxModel<String>(items));
+    }
+
+    private void loadData(ArrayList<entity.SanPham> list){
         modelSanPham.setRowCount(0);
         for(entity.SanPham sp : list)
             modelSanPham.addRow(new Object[] {sp.getMaSP(), sp.getTenSP(), sp.getLoaiSP().getMaLoaiSP()
-                    , sp.getKickCo().getKichCo(), sp.getDonGia()});
+                    , sp.getKickCo().getKichCo(), sp.getDonGia(), sp.isTrangThai() ? "Còn":"Hết"});
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
