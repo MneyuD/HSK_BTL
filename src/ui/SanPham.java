@@ -121,7 +121,7 @@ public class SanPham extends javax.swing.JPanel{
             }
         });
 
-        cbbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn nha", "Hết nha" }));
+        cbbTrangThai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn", "Hết" }));
         cbbTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbbTrangThaiActionPerformed(evt);
@@ -260,12 +260,38 @@ public class SanPham extends javax.swing.JPanel{
         lblLoaiSP_TimKiem.setText("Loại sản phẩm");
 
         cbbLoaiSP_TimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nước", "Đồ ăn", " " }));
+        cbbLoaiSP_TimKiem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String tenLoai = (String) cbbLoaiSP_TimKiem.getSelectedItem();
+                ArrayList<entity.SanPham> spList;
+                if(cbbLoaiSP_TimKiem.getSelectedIndex() == 0) {
+                    spList = sp_dao.getAllProduct();
+                } else {
+                    spList = sp_dao.getProductByType(tenLoai);
+                }
+                loadData(spList);
+            }
+        });
 
         lblTrangThai_TimKiem.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblTrangThai_TimKiem.setText("Trạng thái");
 
-        cbbTrangThai_TimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn nha", "Hết nha" }));
+        cbbTrangThai_TimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn", "Hết" +
+                "" }));
+        cbbTrangThai_TimKiem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String trangThai = (String) cbbTrangThai_TimKiem.getSelectedItem();
+                boolean status = false;
+                if(trangThai.equalsIgnoreCase("Còn")) {
+                    status = true;
+                }
+                ArrayList<entity.SanPham> spList = sp_dao.getProduct_ByStatus(status);
 
+                loadData(spList);
+            }
+        });
         jScrollPaneTTSP.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         jTableThongTinSP.setModel(modelSanPham = new javax.swing.table.DefaultTableModel(
@@ -286,11 +312,15 @@ public class SanPham extends javax.swing.JPanel{
             @Override
             public void mouseClicked(MouseEvent e) {
                 int row = jTableThongTinSP.getSelectedRow();
-//                txtMaSP.setText(modelSanPham.getValueAt(row, 0).toString());
-                txtTenSP.setText(modelSanPham.getValueAt(row, 1).toString());
-                txtDonGia.setText(modelSanPham.getValueAt(row, 4).toString());
-                cbbLoaiSP.setSelectedItem(modelSanPham.getValueAt(row, 2).toString());
-                cbbTrangThai.setSelectedItem(modelSanPham.getValueAt(row, 5).toString());
+                String maSP = modelSanPham.getValueAt(row,0).toString();
+                entity.SanPham sp = sp_dao.getProduct_ByID(maSP);
+                txtTenSP.setText(sp.getTenSP());
+                txtNgayHetHan.setText(String.valueOf(sp.getNgayHetHan()));
+                txtDonGia.setText(String.valueOf(sp.getDonGia()));
+                txtThue.setText(String.valueOf(sp.getThue()));
+                cbbLoaiSP.setSelectedItem(sp.getLoaiSP().getTenLoaiSP());
+                cbbKichCoSP.setSelectedItem(sp.getKickCo().getKichCo());
+                cbbTrangThai.setSelectedItem(sp.isTrangThai() ? "Còn" : "Hết");
             }
 
             @Override
@@ -385,38 +415,27 @@ public class SanPham extends javax.swing.JPanel{
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-    }// </editor-fold>          
 
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    private void cbbTrangThai_TimKiemActionPerformed(ActionEvent evt) {
-        String trangThai = (String) cbbTrangThai_TimKiem.getSelectedItem();
-        boolean status = false;
-        if(trangThai.equalsIgnoreCase("Còn")) {
-            status = true;
-        }
-        ArrayList<entity.SanPham> spList = sp_dao.getProduct_ByStatus(status);
+        txtTimSP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modelSanPham.setRowCount(0);
+                ArrayList<entity.SanPham> list = sp_dao.getProduct_ByName(txtTimSP.getText().trim());
 
-        loadData(spList);
-    }
+                loadData(list);
+            }
+        });
 
-    private void cbbLoaiSP_TimKiemActionPerformed(ActionEvent evt) {
-        String tenLoai = (String) cbbLoaiSP_TimKiem.getSelectedItem();
-        ArrayList<entity.SanPham> spList;
-        if(cbbLoaiSP_TimKiem.getSelectedIndex() == 0) {
-            spList = sp_dao.getAllProduct();
-        } else {
-            spList = sp_dao.getProductByType(tenLoai);
-        }
-        loadData(spList);
-    }
+        btnTimSP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modelSanPham.setRowCount(0);
+                ArrayList<entity.SanPham> list = sp_dao.getProduct_ByName(txtTimSP.getText().trim());
+
+                loadData(list);
+            }
+        });
+    }// </editor-fold>
 
     private void txtTenSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenSPActionPerformed
         // TODO add your handling code here:

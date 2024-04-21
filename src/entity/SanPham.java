@@ -27,6 +27,11 @@ public class SanPham {
 		super();
 		this.maSP = maSP;
 	}
+
+	public SanPham() {
+
+	}
+
 	/**
 	 * @return the maSP
 	 */

@@ -97,7 +97,6 @@ public class ChiTietHD_DAO {
 
                 int soLuong = rs.getInt("soLuong");
                 Double tongTien = (double) 0;
-                System.out.println("\nngayLap: " + ngayLap);
                 HoaDon hoaDon = new HoaDon( maHD, ngayLap, pTTT, gioVao, gioRa, ban, nhanVien, khachHang, tongTien) ;
 
                 Double thanhTien = (double) 0;

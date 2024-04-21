@@ -108,6 +108,37 @@ public class SanPham_DAO {
         return dsSP;
     }
 
+    public SanPham getProduct_ByID(String maSP) {
+        SanPham sp = null;
+        ConnectDB.getInstance();
+        Connection con = ConnectDB.getConnection();
+        try {
+            PreparedStatement sm = con.prepareStatement("SELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE maSP LIKE ?");
+            sm.setString(1, maSP + "");
+            ResultSet rs = sm.executeQuery();
+
+            while(rs.next()) {
+                String tenSanPham = rs.getString("tenSP");
+                Double donGia = rs.getDouble("donGia");
+                Enum_KichCo kichCo = Enum_KichCo.valueOf(rs.getString("kichCo"));
+                LocalDate ngayHetHan = null;
+                Date dateTime = rs.getDate("ngayHetHan");
+                if(dateTime != null) {
+                    ngayHetHan = dateTime.toLocalDate();
+                }
+                Double thue = rs.getDouble("thue");
+                boolean trangThai = rs.getBoolean("trangThai");
+                LoaiSP loaiSp = new LoaiSP(rs.getString("maLoai"), rs.getString("tenLoai"));
+
+                sp = new SanPham(maSP, tenSanPham, donGia, thue, kichCo, ngayHetHan, trangThai, loaiSp);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sp;
+    }
+
     public ArrayList<SanPham> getProduct_ByStatus(boolean status) {
         ArrayList<SanPham> dsSP = new ArrayList<SanPham>();
         ConnectDB.getInstance();
@@ -168,13 +199,22 @@ public class SanPham_DAO {
         return n > 0;
     }
 
-    public static void main(String[] args) {
-        ConnectDB.getInstance().connect();
-        SanPham_DAO sp_dao = new SanPham_DAO();
+//    public static void main(String[] args) {
+//        ConnectDB.getInstance().connect();
+//        SanPham_DAO sp_dao = new SanPham_DAO();
+//
+//        String maSP = "20240419SP000001";
+//        ArrayList<SanPham> spList = sp_dao.getProduct_ByID(maSP);
+//        for(SanPham sp : spList) {
+//            System.out.println(sp.getTenSP() + ": " + sp.getNgayHetHan());
+//        }
+//
+//        System.out.println("\nStatus: ");
+//        ArrayList<SanPham> list = sp_dao.getProduct_ByStatus(true);
+//        for(SanPham sp : list) {
+//            System.out.println(sp.getTenSP() + ": " + sp.getNgayHetHan());
+//        }
+//    }
 
-        ArrayList<SanPham> spList = sp_dao.getAllProduct();
-        for(SanPham sp : spList) {
-            System.out.println(": " + sp.getNgayHetHan());
-        }
-    }
+
 }
