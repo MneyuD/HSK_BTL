@@ -5,11 +5,27 @@
 package ui;
 
 
-public class ThongKe extends javax.swing.JPanel {
+import connect.ConnectDB;
+import dao.HoaDon_DAO;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
+public class ThongKe extends javax.swing.JPanel {
+    private static DecimalFormat df = new DecimalFormat("#,##0.00 VND");
     public ThongKe() {
+        ConnectDB.getInstance().connect();
         initComponents();
 
+        //HoaDon_DAO hd_dao = new HoaDon_DAO();
+        //Double dailyRevenueue = new HoaDon_DAO().getDailyRevenue();
+        txtTongHN.setText(df.format(new HoaDon_DAO().getDailyRevenue()));
+        txtTongT.setText(df.format(new HoaDon_DAO().getMonthlyRevenue()));
     }
 
     /**
@@ -26,9 +42,9 @@ public class ThongKe extends javax.swing.JPanel {
         jPanelHomNay = new javax.swing.JPanel();
         lblHN = new javax.swing.JLabel();
         txtTongHN = new javax.swing.JTextField();
-        jPanel7Ngay = new javax.swing.JPanel();
-        lbl7N = new javax.swing.JLabel();
-        txtTong7N = new javax.swing.JTextField();
+        jPanelNam = new javax.swing.JPanel();
+        lblNam = new javax.swing.JLabel();
+        txtTongNam = new javax.swing.JTextField();
         jPanel1Thang = new javax.swing.JPanel();
         lblT = new javax.swing.JLabel();
         txtTongT = new javax.swing.JTextField();
@@ -101,42 +117,6 @@ public class ThongKe extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel7Ngay.setBackground(new java.awt.Color(143, 108, 101));
-
-        lbl7N.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lbl7N.setForeground(new java.awt.Color(255, 255, 255));
-        lbl7N.setText("7 ngày");
-
-        txtTong7N.setBackground(new java.awt.Color(143, 108, 101));
-        txtTong7N.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        txtTong7N.setForeground(new java.awt.Color(255, 255, 255));
-        txtTong7N.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtTong7N.setText("Tiền");
-        txtTong7N.setBorder(null);
-
-        javax.swing.GroupLayout jPanel7NgayLayout = new javax.swing.GroupLayout(jPanel7Ngay);
-        jPanel7Ngay.setLayout(jPanel7NgayLayout);
-        jPanel7NgayLayout.setHorizontalGroup(
-            jPanel7NgayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7NgayLayout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addComponent(lbl7N)
-                .addContainerGap(81, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7NgayLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtTong7N)
-                .addContainerGap())
-        );
-        jPanel7NgayLayout.setVerticalGroup(
-            jPanel7NgayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7NgayLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(lbl7N)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtTong7N, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         jPanel1Thang.setBackground(new java.awt.Color(143, 108, 101));
 
         lblT.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -144,7 +124,7 @@ public class ThongKe extends javax.swing.JPanel {
         lblT.setText("Tháng");
 
         txtTongT.setBackground(new java.awt.Color(143, 108, 101));
-        txtTongT.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        txtTongT.setFont(new java.awt.Font("Segoe UI", 1, 18));
         txtTongT.setForeground(new java.awt.Color(255, 255, 255));
         txtTongT.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTongT.setText("Tiền");
@@ -168,6 +148,42 @@ public class ThongKe extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtTongT, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanelNam.setBackground(new java.awt.Color(143, 108, 101));
+
+        lblNam.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblNam.setForeground(new java.awt.Color(255, 255, 255));
+        lblNam.setText("Năm");
+
+        txtTongNam.setBackground(new java.awt.Color(143, 108, 101));
+        txtTongNam.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        txtTongNam.setForeground(new java.awt.Color(255, 255, 255));
+        txtTongNam.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTongNam.setText("Tiền");
+        txtTongNam.setBorder(null);
+
+        javax.swing.GroupLayout jPanelNamLayout = new javax.swing.GroupLayout(jPanelNam);
+        jPanelNam.setLayout(jPanelNamLayout);
+        jPanelNamLayout.setHorizontalGroup(
+                jPanelNamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelNamLayout.createSequentialGroup()
+                                .addGap(72, 72, 72)
+                                .addComponent(lblNam)
+                                .addContainerGap(81, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelNamLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(txtTongNam)
+                                .addContainerGap())
+        );
+        jPanelNamLayout.setVerticalGroup(
+                jPanelNamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelNamLayout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(lblNam)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtTongNam, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanelTuy.setBackground(new java.awt.Color(143, 108, 101));
@@ -228,6 +244,13 @@ public class ThongKe extends javax.swing.JPanel {
         btnXuatTK.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnXuatTK.setRadius(10);
 
+        btnXuatTK.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnXuatTKActionPerformed(e);
+            }
+        });
+
         javax.swing.GroupLayout jPanelChonXTKLayout = new javax.swing.GroupLayout(jPanelChonXTK);
         jPanelChonXTK.setLayout(jPanelChonXTKLayout);
         jPanelChonXTKLayout.setHorizontalGroup(
@@ -277,7 +300,7 @@ public class ThongKe extends javax.swing.JPanel {
                 .addGap(90, 90, 90)
                 .addComponent(jPanelHomNay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(110, 110, 110)
-                .addComponent(jPanel7Ngay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelNam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(110, 110, 110)
                 .addComponent(jPanel1Thang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
@@ -290,7 +313,7 @@ public class ThongKe extends javax.swing.JPanel {
                 .addGap(15, 15, 15)
                 .addGroup(jPanelTrenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanelHomNay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel7Ngay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelNam, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1Thang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanelTuy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -468,8 +491,38 @@ public class ThongKe extends javax.swing.JPanel {
 
     private void txtTuNgay_TrongKhungThongKeActionPerformed(java.awt.event.ActionEvent evt) {                                                            
         // TODO add your handling code here:
-    }                                                           
+    }
 
+    private void btnXuatTKActionPerformed(java.awt.event.ActionEvent evt) {
+        String started = txtTuNgay_TrongKhungThongKe.getText().trim();
+        String ended = txtDenNgay_TrungKhungThongKe.getText().trim();
+        if(started.isEmpty()) {
+            txtTuNgay_TrongKhungThongKe.requestFocus();
+        } else if(ended.isEmpty()) {
+            txtDenNgay_TrungKhungThongKe.requestFocus();
+        } else if(!(started.isEmpty() && ended.isEmpty())) {
+            LocalDate startedDate = validDate(started);
+            LocalDate endedDate = validDate(ended);
+
+            if(startedDate != null && endedDate != null) {
+                Double customizedRevenue = new HoaDon_DAO().getCustomizedRevenue(startedDate, endedDate);
+                txtTongTC.setText(df.format(customizedRevenue));
+            }
+        }
+    }
+
+    private LocalDate validDate(String txtInput) {
+        LocalDate date = null;
+        if(txtInput.isEmpty()){
+           return null;
+        }
+        try {
+            date = LocalDate.parse(txtInput, DateTimeFormatter.ofPattern("d/M/yyyy"));
+        } catch (DateTimeException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 
     // Variables declaration - do not modify                     
     private ui.MyButton btnLoc;
@@ -480,7 +533,7 @@ public class ThongKe extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel1Thang;
-    private javax.swing.JPanel jPanel7Ngay;
+    private javax.swing.JPanel jPanelNam;
     private javax.swing.JPanel jPanelChonXTK;
     private javax.swing.JPanel jPanelDuoi;
     private javax.swing.JPanel jPanelHomNay;
@@ -489,7 +542,7 @@ public class ThongKe extends javax.swing.JPanel {
     private javax.swing.JPanel jPanelXuatTKDuoi;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JLabel lbl7N;
+    private javax.swing.JLabel lblNam;
     private javax.swing.JLabel lblDen1;
     private javax.swing.JLabel lblDenNgay;
     private javax.swing.JLabel lblHN;
@@ -500,7 +553,7 @@ public class ThongKe extends javax.swing.JPanel {
     private javax.swing.JLabel lblTuNgay;
     private javax.swing.JTextField txtDenNgay_Loc;
     private javax.swing.JTextField txtDenNgay_TrungKhungThongKe;
-    private javax.swing.JTextField txtTong7N;
+    private javax.swing.JTextField txtTongNam;
     private javax.swing.JTextField txtTongHN;
     private javax.swing.JTextField txtTongT;
     private javax.swing.JTextField txtTongTC;
