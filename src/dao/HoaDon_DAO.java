@@ -95,4 +95,31 @@ public class HoaDon_DAO {
         }
         return revenue;
     }
+
+    public Double getdRevenueForYear() {
+        Double revenue = (double) 0;
+        ConnectDB.getInstance();
+        Connection con = ConnectDB.getConnection();
+        PreparedStatement stmt = null;
+        try {
+            stmt = con.prepareStatement(
+                    "SELECT SUM([tongTien]) AS TongTien " +
+                            "FROM HoaDon " +
+                            "WHERE YEAR(ngayLap) = YEAR(GETDATE())" +
+                            "GROUP BY YEAR(ngayLap)");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                revenue = rs.getDouble("TongTien");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return revenue;
+    }
 }

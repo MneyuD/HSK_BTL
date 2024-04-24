@@ -27,6 +27,7 @@ public class ThongKe extends javax.swing.JPanel {
         
         txtTongHN.setText(df.format(new HoaDon_DAO().getDailyRevenue()));
         txtTongT.setText(df.format(new HoaDon_DAO().getMonthlyRevenue()));
+        txtTongNam.setText(df.format(new HoaDon_DAO().getdRevenueForYear()));
     }
 
     /**
@@ -488,7 +489,7 @@ public class ThongKe extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
-    }// </editor-fold>                        
+    }// </editor-fold>
 
     private void txtTuNgay_TrongKhungThongKeActionPerformed(java.awt.event.ActionEvent evt) {                                                            
         // TODO add your handling code here:
