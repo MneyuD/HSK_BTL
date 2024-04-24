@@ -7,6 +7,8 @@ package ui;
 import connect.ConnectDB;
 import dao.LoaiSP_DAO;
 import dao.SanPham_DAO;
+import entity.Enum_KichCo;
+import entity.LoaiSP;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -457,7 +460,35 @@ public class SanPham extends javax.swing.JPanel{
     }                                       
 
     private void btnThemSPActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
+        String maSP = "Random";
+        String tenSP = txtTenSP.getText().trim();
+
+        String date = txtNgayHetHan.getText().trim();
+        LocalDate ngayHetHan;
+        if(date.isEmpty()){
+            ngayHetHan = null;
+        } else {
+            ngayHetHan = LocalDate.parse(txtNgayHetHan.getText().trim());
+        }
+
+        Double donGia = Double.valueOf(txtDonGia.getText().trim());
+        Double thue = Double.valueOf(txtThue.getText().trim());
+
+        String tenLoai = String.valueOf(cbbLoaiSP.getSelectedItem());
+        String maLoai = new LoaiSP_DAO().getProductType_ByName(tenLoai);
+        LoaiSP loaiSP = new LoaiSP(maLoai, tenLoai);
+
+        Enum_KichCo kichCo = Enum_KichCo.valueOf(String.valueOf(cbbKichCoSP.getSelectedItem()));
+
+        String trangThai = String.valueOf(cbbTrangThai.getSelectedIndex());
+        boolean status = false;
+        if(trangThai.equalsIgnoreCase("Còn"))
+            status = true;
+        entity.SanPham sp = new entity.SanPham(maSP,tenSP, donGia, thue, kichCo, ngayHetHan, status, loaiSP);
+
+        if(new SanPham_DAO().createSanPham(sp)){
+            loadData(new SanPham_DAO().getAllProduct());
+        }
     } 
     private void updateComboBoxData() {
         ArrayList<entity.LoaiSP> spList = loaiSP_dao.getAllProductType();
@@ -469,7 +500,14 @@ public class SanPham extends javax.swing.JPanel{
             items[i] = sp.getTenLoaiSP();
         }
         cbbLoaiSP_TimKiem.setModel(new DefaultComboBoxModel<String>(items));
-        cbbLoaiSP.setModel(new DefaultComboBoxModel<String>(items));
+
+        String[] items2 = new String[spList.size()];
+        int y = 0;
+        for(entity.LoaiSP sp : spList) {
+            items[i] = sp.getTenLoaiSP();
+            y++;
+        }
+        cbbLoaiSP.setModel(new DefaultComboBoxModel<String>(items2));
     }
 
     private void loadData(ArrayList<entity.SanPham> list){

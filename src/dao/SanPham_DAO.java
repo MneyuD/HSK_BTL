@@ -184,20 +184,25 @@ public class SanPham_DAO {
         return dsSP;
     }
 
-    public boolean create(SanPham sp) {
+    public boolean createSanPham(SanPham sp) {
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
         PreparedStatement stmt = null;
         int n = 0;
         try {
-            stmt = con.prepareStatement("INSERT SanPham VALUES (?, ?, ?, ?, ?, ?, ?)");
-            stmt.setString(1, sp.getMaSP());
+            stmt = con.prepareStatement("INSERT SanPham VALUES (?, ?, ?, ?, ?, CONVERT(DATE, ?, 103), ?, ?)");
+            stmt.setString(1,"Random");
             stmt.setString(2, sp.getTenSP());
             stmt.setString(3, String.valueOf(sp.getKickCo()));
             stmt.setDouble(4, sp.getDonGia());
             stmt.setDouble(5, sp.getThue());
-            stmt.setDate(6, Date.valueOf(sp.getNgayHetHan()));
-            stmt.setString(7, sp.getLoaiSP().getMaLoaiSP());
+            if(sp.getNgayHetHan() == null) {
+                stmt.setDate(6, null);
+            } else {
+                stmt.setDate(6, Date.valueOf(sp.getNgayHetHan()));
+            }
+            stmt.setBoolean(7, sp.isTrangThai());
+            stmt.setString(8, sp.getLoaiSP().getMaLoaiSP());
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

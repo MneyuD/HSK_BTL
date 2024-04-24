@@ -8,9 +8,12 @@ package ui;
 import connect.ConnectDB;
 import dao.ChiTietHD_DAO;
 import dao.HoaDon_DAO;
+import dao.LoaiSP_DAO;
+import dao.SanPham_DAO;
 import entity.ChiTietHD;
 import entity.SanPham;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,15 +22,18 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ThongKe extends javax.swing.JPanel {
     private static DecimalFormat df = new DecimalFormat("#,##0.00 VND");
+    private final LoaiSP_DAO loaiSP_dao;
     private DefaultTableModel modelSanPham;
 
     public ThongKe() {
         ConnectDB.getInstance().connect();
+
         initComponents();
+        loaiSP_dao = new LoaiSP_DAO();
+        updateComboBoxData();
 
         loadData(new ChiTietHD_DAO().getProduct_BestSeller());
 
@@ -343,11 +349,11 @@ public class ThongKe extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Mã SP", "Tên SP", "Số lượng", "Trạng thái"
+                "Mã SP", "Tên SP", "Số lượng bán", "Trạng thái"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -355,6 +361,7 @@ public class ThongKe extends javax.swing.JPanel {
             }
         });
         jTable1.setRowHeight(25);
+
         jScrollPane1.setViewportView(jTable1);
 
         jPanelXuatTKDuoi.setBackground(new java.awt.Color(250, 238, 232));
@@ -373,7 +380,21 @@ public class ThongKe extends javax.swing.JPanel {
 
         cbbLoaiSP_Loc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
 
-        cbbTrangThaiSP_Loc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
+        cbbLoaiSP_Loc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cbbLoaiSP_LocActionPerformed(e);
+            }
+        });
+
+        cbbTrangThaiSP_Loc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn", "Hết" }));
+
+        cbbTrangThaiSP_Loc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cbbTrangThaiSP_LocActionPerformed(e);
+            }
+        });
 
         javax.swing.GroupLayout jPanelXuatTKDuoiLayout = new javax.swing.GroupLayout(jPanelXuatTKDuoi);
         jPanelXuatTKDuoi.setLayout(jPanelXuatTKDuoiLayout);
@@ -499,6 +520,28 @@ public class ThongKe extends javax.swing.JPanel {
         );
     }// </editor-fold>
 
+    private void cbbTrangThaiSP_LocActionPerformed(ActionEvent e) {
+        String trangThai = (String) cbbTrangThaiSP_Loc.getSelectedItem();
+        boolean status = false;
+        if(trangThai.equalsIgnoreCase("Còn")) {
+            status = true;
+        }
+        ArrayList<ChiTietHD> orderList = new ChiTietHD_DAO().getProduct_ByStatus(status);
+
+        loadData(orderList);
+    }
+
+    private void cbbLoaiSP_LocActionPerformed(ActionEvent e) {
+        String tenLoai = (String) cbbLoaiSP_Loc.getSelectedItem();
+        ArrayList<ChiTietHD> orderList;
+        if(cbbLoaiSP_Loc.getSelectedIndex() == 0) {
+            orderList = new ChiTietHD_DAO().getProduct_BestSeller();
+        } else {
+            orderList = new ChiTietHD_DAO().getProduct_ByType(tenLoai);
+        }
+        loadData(orderList);
+    }
+
     private void txtTuNgay_TrongKhungThongKeActionPerformed(java.awt.event.ActionEvent evt) {                                                            
         // TODO add your handling code here:
     }
@@ -533,18 +576,29 @@ public class ThongKe extends javax.swing.JPanel {
         }
         return date;
     }
+    private void updateComboBoxData() {
+        ArrayList<entity.LoaiSP> spList = loaiSP_dao.getAllProductType();
+        String[] items = new String[spList.size() + 1];
+        int i = 0;
+        items[i] = "Tất cả";
+        for(entity.LoaiSP sp : spList) {
+            i++;
+            items[i] = sp.getTenLoaiSP();
+        }
+        cbbLoaiSP_Loc.setModel(new DefaultComboBoxModel<String>(items));
+    }
 
     private void loadData(ArrayList<ChiTietHD> list){
         modelSanPham.setRowCount(0);
-        for(ChiTietHD sp : list)
-            modelSanPham.addRow(new Object[] {sp.getSp().getMaSP(), sp.getSp().getTenSP()
-                    , sp.getSoLuong() + "", sp.getSp().isTrangThai() ? "Còn":"Hết"});
+        for(ChiTietHD cthd : list)
+            modelSanPham.addRow(new Object[] {cthd.getSp().getMaSP(), cthd.getSp().getTenSP()
+                    , String.format("%s", cthd.getSoLuong()), cthd.getSp().isTrangThai() ? "Còn":"Hết"});
     }
 
     // Variables declaration - do not modify                     
     private ui.MyButton btnLoc;
     private ui.MyButton btnXuatTK;
-    private javax.swing.JComboBox<String> cbbLoaiSP_Loc;
+    private javax.swing.JComboBox<String> cbbLoaiSP_Loc ;
     private javax.swing.JComboBox<String> cbbTrangThaiSP_Loc;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

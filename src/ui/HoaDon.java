@@ -463,6 +463,7 @@ public class HoaDon extends javax.swing.JPanel {
         });
         HoaDonInfo_Table.setShowHorizontalLines(true);
         HoaDonInfo_Table.setShowVerticalLines(true);
+        HoaDonInfo_Table.setRowHeight(25);
         jScrollPane5.setViewportView(HoaDonInfo_Table);
 
         ChiTietHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
