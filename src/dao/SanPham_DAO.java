@@ -47,7 +47,10 @@ public class SanPham_DAO {
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
         try {
-            PreparedStatement sm = con.prepareStatement("SELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE tenLoai LIKE ?");
+            PreparedStatement sm = con.prepareStatement(
+                    "SELECT * FROM SanPham SP " +
+                            "JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai " +
+                            "WHERE tenLoai LIKE ?");
             sm.setString(1, "%" + tenLoai + "%");
             ResultSet rs = sm.executeQuery();
 
@@ -80,7 +83,10 @@ public class SanPham_DAO {
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
         try {
-            PreparedStatement sm = con.prepareStatement("SELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE tenSP LIKE ?");
+            PreparedStatement sm = con.prepareStatement(
+                    "SELECT * FROM SanPham SP " +
+                            "JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai " +
+                            "WHERE tenSP LIKE ?");
             sm.setString(1, "%" + tenSP + "%");
             ResultSet rs = sm.executeQuery();
 
@@ -113,7 +119,10 @@ public class SanPham_DAO {
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
         try {
-            PreparedStatement sm = con.prepareStatement("SELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE maSP LIKE ?");
+            PreparedStatement sm = con.prepareStatement(
+                    "SELECT * FROM SanPham SP " +
+                            "JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai " +
+                            "WHERE maSP LIKE ?");
             sm.setString(1, maSP + "");
             ResultSet rs = sm.executeQuery();
 
@@ -144,7 +153,10 @@ public class SanPham_DAO {
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
         try {
-            PreparedStatement sm = con.prepareStatement("SELECT * FROM SanPham SP JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai WHERE trangThai = ?");
+            PreparedStatement sm = con.prepareStatement(
+                    "SELECT * FROM SanPham SP " +
+                            "JOIN LoaiSP LSP ON SP.maLoai = LSP.maLoai " +
+                            "WHERE trangThai = ?");
             sm.setBoolean(1, status);
             ResultSet rs = sm.executeQuery();
 

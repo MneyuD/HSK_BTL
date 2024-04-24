@@ -6,28 +6,36 @@ package ui;
 
 
 import connect.ConnectDB;
+import dao.ChiTietHD_DAO;
 import dao.HoaDon_DAO;
+import entity.ChiTietHD;
+import entity.SanPham;
 
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ThongKe extends javax.swing.JPanel {
     private static DecimalFormat df = new DecimalFormat("#,##0.00 VND");
+    private DefaultTableModel modelSanPham;
+
     public ThongKe() {
         ConnectDB.getInstance().connect();
         initComponents();
 
-        //HoaDon_DAO hd_dao = new HoaDon_DAO();
-        //Double dailyRevenueue = new HoaDon_DAO().getDailyRevenue();
-        
+        loadData(new ChiTietHD_DAO().getProduct_BestSeller());
+
         txtTongHN.setText(df.format(new HoaDon_DAO().getDailyRevenue()));
         txtTongT.setText(df.format(new HoaDon_DAO().getMonthlyRevenue()));
         txtTongNam.setText(df.format(new HoaDon_DAO().getdRevenueForYear()));
+
+
     }
 
     /**
@@ -327,7 +335,7 @@ public class ThongKe extends javax.swing.JPanel {
         lblThongKe.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblThongKe.setText("Thống kê sản phẩm:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable1.setModel(modelSanPham = new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -524,6 +532,13 @@ public class ThongKe extends javax.swing.JPanel {
             e.printStackTrace();
         }
         return date;
+    }
+
+    private void loadData(ArrayList<ChiTietHD> list){
+        modelSanPham.setRowCount(0);
+        for(ChiTietHD sp : list)
+            modelSanPham.addRow(new Object[] {sp.getSp().getMaSP(), sp.getSp().getTenSP()
+                    , sp.getSoLuong() + "", sp.getSp().isTrangThai() ? "Còn":"Hết"});
     }
 
     // Variables declaration - do not modify                     

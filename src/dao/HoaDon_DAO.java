@@ -22,8 +22,8 @@ public class HoaDon_DAO {
             stmt = con.prepareStatement(
                     "SELECT SUM([tongTien]) AS TongTien " +
                     "FROM HoaDon " +
-                    "WHERE CONVERT(DATE, ngayLap) = CONVERT(DATE, GETDATE()) " +
-                    "GROUP BY CONVERT(DATE, ngayLap)");
+                    "WHERE CONVERT(DATE, ngayLap, 103) = CONVERT(DATE, GETDATE(), 103) " +
+                    "GROUP BY CONVERT(DATE, ngayLap, 103)");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
                 revenue = rs.getDouble("TongTien");
@@ -49,7 +49,7 @@ public class HoaDon_DAO {
             stmt = con.prepareStatement(
                     "SELECT SUM([tongTien]) AS TongTien " +
                             "FROM HoaDon " +
-                            "WHERE YEAR(ngayLap) = YEAR(GETDATE()) AND MONTH(ngayLap) = MONTH(GETDATE())" +
+                            "WHERE YEAR(ngayLap) = YEAR(GETDATE()) AND MONTH(ngayLap) = MONTH(GETDATE()) " +
                             "GROUP BY YEAR(ngayLap), MONTH(ngayLap)");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
@@ -105,7 +105,7 @@ public class HoaDon_DAO {
             stmt = con.prepareStatement(
                     "SELECT SUM([tongTien]) AS TongTien " +
                             "FROM HoaDon " +
-                            "WHERE YEAR(ngayLap) = YEAR(GETDATE())" +
+                            "WHERE YEAR(ngayLap) = YEAR(GETDATE()) " +
                             "GROUP BY YEAR(ngayLap)");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {

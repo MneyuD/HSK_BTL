@@ -8,7 +8,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ChiTietHD_DAO {
@@ -103,6 +102,39 @@ public class ChiTietHD_DAO {
                 ChiTietHD chiTietHD = new ChiTietHD(hoaDon, sanPham, soLuong, thanhTien);
                 orderList.add(chiTietHD);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orderList;
+    }
+
+    public ArrayList<ChiTietHD> getProduct_BestSeller() {
+        ArrayList<ChiTietHD> orderList = new ArrayList<ChiTietHD>();
+        ConnectDB.getInstance();
+        Connection con = ConnectDB.getConnection();
+        try {
+            PreparedStatement sm = con.prepareStatement(
+                    "SELECT SP.maSP, SP.tenSP, SUM(soLuong) AS SoLuong, trangThai " +
+                            "FROM ChiTietHD CT JOIN SanPham SP ON CT.maSP = SP.maSP " +
+                            "GROUP BY SP.[maSP], SP.tenSP, trangThai " +
+                            "ORDER BY SUM(soLuong) DESC");
+            ResultSet rs = sm.executeQuery();
+
+            while(rs.next()) {
+                String maHD = rs.getString("maSP");
+                HoaDon hd = new HoaDon(maHD);
+
+                String maSP = rs.getString("maSP");
+                String tenSP = rs.getString("tenSP");
+                boolean trangThai = rs.getBoolean("trangThai");
+                int soLuong = rs.getInt("SoLuong");
+
+                SanPham sp = new SanPham(maSP, tenSP, trangThai);
+
+                ChiTietHD cthd = new ChiTietHD(hd, sp, soLuong, 0);
+                orderList.add(cthd);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
